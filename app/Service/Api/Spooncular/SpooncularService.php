@@ -7,6 +7,8 @@ namespace App\Service\Api\Spooncular;
 use App\Http\Client\SpooncularClient;
 use App\Http\Requests\Spooncular\Recipe\Id\GetRecipeInformation;
 use App\Http\Requests\Spooncular\Recipe\QuickAnswerRequest;
+use App\Http\Requests\Spooncular\Recipe\RecipeByIngredientsRequest;
+use App\Http\Requests\Spooncular\Recipe\RecipeByNutrientsRequest;
 use App\Http\Requests\Spooncular\Recipe\SearchRecipeRequest;
 use GuzzleHttp\Exception\TransferException;
 
@@ -87,6 +89,54 @@ class SpooncularService
                 'data' => $response['data']
             ];
 
+
+        } catch (TransferException $e) {
+            $data = json_decode($e->getResponse()->getBody()->getContents());
+            return [
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => $data
+            ];
+        }
+
+    }
+
+    public function searchRecipeByIngredients(RecipeByIngredientsRequest $request)
+    {
+        try {
+            $response = $this->spoonCularClient->request("/recipes/findByIngredients", [
+                'ingredients' => $request->get('ingredients'),
+                'number' => $request->get('number'),
+                'limitLicense' => $request->get('limitLicense'),
+                'ranking' => $request->get('ranking'),
+                'ignorePantry' => $request->get('ignorePantry')
+            ]);
+
+            return [
+                'code' => $response['code'],
+                'data' => $response['data']
+            ];
+
+        } catch (TransferException $e) {
+            $data = json_decode($e->getResponse()->getBody()->getContents());
+            return [
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => $data
+            ];
+        }
+
+    }
+
+    public function searchRecipeByNutrients(RecipeByNutrientsRequest $request)
+    {
+        try {
+            $response = $this->spoonCularClient->request("/recipes/findByIngredients", [
+                $request->all()
+            ]);
+
+            return [
+                'code' => $response['code'],
+                'data' => $response['data']
+            ];
 
         } catch (TransferException $e) {
             $data = json_decode($e->getResponse()->getBody()->getContents());

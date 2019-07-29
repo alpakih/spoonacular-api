@@ -21,5 +21,7 @@ Route::group(['prefix'=>'v1','namespace'=>'API'], function () {
     Route::post('/spooncular/recipe/search', 'SpooncularController@searchRecipes');
     Route::post('/spooncular/recipe/quick-answer', 'SpooncularController@quickAnswer');
     Route::post('/spooncular/recipe/information', 'SpooncularController@getRecipeInformation');
+    Route::post('/spooncular/recipe/search/by-ingredients', 'SpooncularController@searchRecipeByIngredients');
+    Route::post('/spooncular/recipe/search/by-nutrients', 'SpooncularController@searchRecipeByNutrients');
 
 });
