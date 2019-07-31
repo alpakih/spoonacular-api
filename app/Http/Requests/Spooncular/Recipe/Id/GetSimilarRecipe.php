@@ -6,7 +6,7 @@ use App\Helpers\GeneralHelpers;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetRecipeInformation extends FormRequest
+class GetSimilarRecipe extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class GetRecipeInformation extends FormRequest
     {
         return [
             'recipe_id' => 'required',
-            'includeNutrition' => 'boolean|nullable'
+            'number' => 'numeric|nullable'
         ];
     }
 

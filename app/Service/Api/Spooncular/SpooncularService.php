@@ -6,6 +6,7 @@ namespace App\Service\Api\Spooncular;
 
 use App\Http\Client\SpooncularClient;
 use App\Http\Requests\Spooncular\Recipe\Id\GetRecipeInformation;
+use App\Http\Requests\Spooncular\Recipe\Id\GetSimilarRecipe;
 use App\Http\Requests\Spooncular\Recipe\QuickAnswerRequest;
 use App\Http\Requests\Spooncular\Recipe\RecipeByIngredientsRequest;
 use App\Http\Requests\Spooncular\Recipe\RecipeByNutrientsRequest;
@@ -56,8 +57,8 @@ class SpooncularService
     public function getRecipeInformation(GetRecipeInformation $request)
     {
         try {
-            $response = $this->spoonCularClient->request("/recipes/" . $request->get('id') . "/information", [
-                'id' => $request->get('id'),
+            $response = $this->spoonCularClient->request("/recipes/" . $request->get('recipe_id') . "/information", [
+                'recipe_id' => $request->get('recipe_id'),
                 'includeNutrition' => $request->get('includeNutrition')
             ]);
 
@@ -137,6 +138,30 @@ class SpooncularService
                 'code' => $response['code'],
                 'data' => $response['data']
             ];
+
+        } catch (TransferException $e) {
+            $data = json_decode($e->getResponse()->getBody()->getContents());
+            return [
+                'code' => $e->getResponse()->getStatusCode(),
+                'data' => $data
+            ];
+        }
+
+    }
+
+    public function getSimilarRecipe(GetSimilarRecipe $request)
+    {
+        try {
+            $response = $this->spoonCularClient->request("/recipes/" . $request->get('recipe_id') . "/similar", [
+                'id' => $request->get('recipe_id'),
+                'number' => $request->get('number')
+            ]);
+
+            return [
+                'code' => $response['code'],
+                'data' => $response['data']
+            ];
+
 
         } catch (TransferException $e) {
             $data = json_decode($e->getResponse()->getBody()->getContents());
